@@ -34,11 +34,22 @@ jobs:
           until curl -sf localhost:8000/api/salud; do sleep 1; done
           npm test
 
-      # npm run demo: Qolqe propio, flujo con ventana y mutación que falla.
+      - name: Reporte Allure
+        if: always()
+        run: npm run reporte
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-allure-${{ matrix.os }}
+          path: reportes/allure/index.html
+
+      # npm run demo: Qolqe propio, flujo con ventana, mutación que falla y reporte.
       - name: npm run demo (Windows)
         if: runner.os == 'Windows'
+        env: { CI: 'true' }
         run: |
           taskkill //F //IM python.exe || true
           printf "\n%.0s" 1 2 3 4 5 | npm run demo
-          git diff --exit-code test/
-          ls evidencia/*.png
+          git diff --exit-code features/
+          ls evidencia/*.png reportes/allure/index.html

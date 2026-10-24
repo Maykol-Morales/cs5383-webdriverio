@@ -5,9 +5,19 @@
 Laboratorio de automatización web de **CS5383 Pruebas y Verificación de Software** (UTEC, Clase 11).
 **Grupo 3 · Sebastian y Maykol** · Herramienta: **WebdriverIO 10** · Módulo: **G3 Historial y categorías**.
 
-Automatiza un *happy path* de Qolqe Wallet con el patrón **Page Object + Fixture**:
+Automatiza un *happy path* de Qolqe Wallet con **BDD (Cucumber + Gherkin)**, el patrón **Page Object + Fixture** y reportería con **Allure**:
 
-> Ana inicia sesión → va a *Movimientos* → crea la categoría "Viajes" → abre su último movimiento → lo clasifica en "Viajes" con la nota "Pasaje a Cusco" → se verifica el mensaje "Clasificación guardada", la fila actualizada y que la categoría cuenta "1 movimientos" (HU-G3-03 + HU-G3-07).
+```gherkin
+Scenario: Crear la categoría "Viajes" y clasificar el último movimiento
+  Given que inicié sesión como Ana
+  And estoy en la sección Movimientos
+  When creo la categoría "Viajes" de color "#1E88E5"
+  And clasifico mi movimiento más reciente en "Viajes" con la nota "Pasaje a Cusco"
+  Then la fila del movimiento muestra la categoría "Viajes" y la nota "Pasaje a Cusco"
+  And la categoría "Viajes" cuenta 1 movimientos
+```
+
+Cubre HU-G3-03 (crear categoría) y HU-G3-07 (clasificar movimiento). Flujo de una ejecución: **escenario → paso → Page Object → WebdriverIO → navegador**.
 
 **Presentación:** https://claude.ai/artifact/LSnrwobCbcGrUv6VPg2Qu2
 
@@ -56,10 +66,11 @@ npm run demo
 Funciona igual en Windows, Linux y macOS. Avanza con Enter:
 
 1. Levanta Qolqe en http://localhost:8000 si no está corriendo (con una base de datos temporal) y lo apaga al terminar.
-2. Muestra la spec de IA escrita en lenguaje natural.
-3. Corre el happy path con Chrome visible.
-4. Cambia el oráculo a "2 movimientos" para mostrar que la prueba falla y deja una captura en `evidencia/`.
-5. Restaura la spec, también si se interrumpe con Ctrl+C.
+2. Muestra el escenario de IA (`browser.act()`) escrito en lenguaje natural; sin clave queda *skipped*.
+3. Muestra el escenario Gherkin y lo corre con Chrome visible.
+4. Cambia el escenario a "cuenta 2 movimientos" para mostrar que la prueba falla y deja una captura en `evidencia/`.
+5. Genera el reporte Allure y lo abre en el navegador.
+6. Restaura el escenario, también si se interrumpe con Ctrl+C.
 
 ## 3. Ejecución manual
 
@@ -72,10 +83,11 @@ Funciona igual en Windows, Linux y macOS. Avanza con Enter:
 
 Qolqe queda en http://localhost:8000; la API está documentada en http://localhost:8000/docs.
 
-**Terminal 2: correr la prueba**
+**Terminal 2: correr los escenarios y ver el reporte**
 
 ```bash
-npm test
+npm test             # corre features/clasificar.feature
+npm run reporte      # genera reportes/allure/index.html
 ```
 
 Para ver el navegador, active `HEADED` antes de `npm test`:
@@ -89,12 +101,17 @@ Para ver el navegador, active `HEADED` antes de `npm test`:
 Resultado esperado:
 
 ```
-G3 · Historial y categorías
-   ✓ Ana crea la categoría "Viajes" y clasifica su último movimiento
-1 passing (3.3s)
+Crear la categoría "Viajes" y clasificar el último movimiento
+   ✓ Given que inicié sesión como Ana
+   ✓ And estoy en la sección Movimientos
+   ✓ When creo la categoría "Viajes" de color "#1E88E5"
+   ✓ And clasifico mi movimiento más reciente en "Viajes" con la nota "Pasaje a Cusco"
+   ✓ Then la fila del movimiento muestra la categoría "Viajes" y la nota "Pasaje a Cusco"
+   ✓ And la categoría "Viajes" cuenta 1 movimientos
+6 passing (5.1s)
 ```
 
-Antes de cada prueba se reinician los datos de Qolqe (`POST /api/pruebas/reiniciar`), así que se puede ejecutar las veces que se quiera. Si una prueba falla, la captura queda en `evidencia/`.
+Antes de cada escenario se reinician los datos de Qolqe (`POST /api/pruebas/reiniciar`), así que se puede ejecutar las veces que se quiera. Si una prueba falla, la captura queda en `evidencia/`.
 
 | Variable | Uso |
 |---|---|
@@ -102,17 +119,27 @@ Antes de cada prueba se reinician los datos de Qolqe (`POST /api/pruebas/reinici
 | `QOLQE_URL` | URL de Qolqe (por defecto `http://localhost:8000`) |
 | `CHROME_BIN` | Ruta del navegador, si no es el Chrome por defecto |
 
-## 4. Capacidad de IA: `browser.act()`
+## 4. Reportería
 
-`test/specs/clasificar-ia.e2e.js` repite el mismo flujo escrito como intención en lenguaje natural, con `@wdio/ai-service`. La primera ejecución usa un modelo para manejar el navegador y graba los comandos en `test/specs/__act__/`; las siguientes los repiten sin modelo y sin tokens. `act` solo ejecuta: las verificaciones siguen siendo `expect` en código.
+| Reporte | Dónde | Qué muestra |
+|---|---|---|
+| Consola (`spec`) | la terminal | cada paso Given/When/Then con ✓ o ✖ |
+| **Allure** | `npm run reporte` → `reportes/allure/index.html` (un solo archivo, se abre con doble clic) | escenarios agrupados por épica e historia (`@epic=`, `@story=`), severidad, pasos con su duración y la **captura adjunta** del paso que falló |
+| Evidencia | `evidencia/*.png` | captura del navegador cuando un paso falla |
+| CI | pestaña *Actions* de GitHub | corre en Windows y Linux y publica el reporte Allure como artefacto descargable |
 
-Necesita una clave de API, que este repositorio **no incluye**. Sin clave ni caché, la spec se marca como *skipped*:
+Las etiquetas del `.feature` alimentan el reporte: `@HU-G3-03` filtra en Cucumber y `@story=HU-G3-03` agrupa en Allure. El reporte acumula el historial de corridas en `reportes/allure-historial.jsonl`.
+
+## 5. Capacidad de IA: `browser.act()`
+
+`features/clasificar-ia.feature` repite el mismo flujo, pero sus pasos (`steps/ia.steps.js`) usan `browser.act()` de `@wdio/ai-service`: la acción se escribe como intención en lenguaje natural. La primera ejecución usa un modelo para manejar el navegador y graba los comandos en `features/__act__/`; las siguientes los repiten sin modelo y sin tokens. `act` solo ejecuta: los pasos `Then` siguen verificando con `expect` en código.
+
+Necesita una clave de API, que este repositorio **no incluye**. Sin clave ni caché, el escenario `@ia` se marca como *skipped*:
 
 ```bash
 export ANTHROPIC_API_KEY=...       # PowerShell: $env:ANTHROPIC_API_KEY="..."
 npm run test:ia                    # 1ª vez: graba · siguientes: repite desde la caché
 npm run test:ia:regrabar           # vuelve a grabar
-npm run eject                      # convierte los pasos grabados en código WebdriverIO normal
 ```
 
 ## Estructura
@@ -120,13 +147,17 @@ npm run eject                      # convierte los pasos grabados en código Web
 ```
 qolqe/                        Qolqe Wallet (SUT, copia sin modificar del Proyecto 2)
 docs/requisitos.md            historias de usuario y reglas (G3 en la sección 6)
-wdio.conf.js                  navegador, URL, servicio de IA y fixture
-test/pageobjects/
+features/                     ¿QUÉ se prueba? escenarios en Gherkin
+  clasificar.feature          happy path G3
+  clasificar-ia.feature       mismo flujo con pasos de IA (@ia)
+steps/                        traduce cada paso Given / When / Then a código
+  clasificar.steps.js         llama a los Page Objects y verifica con expect
+  ia.steps.js                 pasos con browser.act()
+pages/                        ¿CÓMO se usa la pantalla? Page Objects
   login.page.js               ingresarComo(celular, pin)
   historial.page.js           abrir, crearCategoria, abrirPrimerMovimiento, clasificar
-test/specs/
-  clasificar.e2e.js           happy path con Page Objects
-  clasificar-ia.e2e.js        mismo flujo con browser.act()
+wdio.conf.js                  navegador, Cucumber, Allure, IA y fixture
+allurerc.mjs                  configuración del reporte Allure 3
 demo.mjs                      guion de la demo en vivo (npm run demo)
 ```
 
@@ -136,3 +167,4 @@ demo.mjs                      guion de la demo en vivo (npm run demo)
 - W3C (2018). *WebDriver*. https://www.w3.org/TR/webdriver1/ · W3C (2025). *WebDriver BiDi*. https://www.w3.org/TR/webdriver-bidi/
 - WebdriverIO: [Automation Protocols](https://webdriver.io/docs/automationProtocols) · [Auto-waiting](https://webdriver.io/docs/autowait) · [AI Steps in Tests](https://webdriver.io/docs/ai-steps) · [v10 release](https://webdriver.io/blog/2026/10/05/webdriverio-v10-release)
 - Fowler, M. (2013). *PageObject* · selenium.dev, *Page object models*.
+- WebdriverIO: [Cucumber Framework](https://webdriver.io/docs/frameworks#using-cucumber) · [Allure Reporter](https://webdriver.io/docs/allure-reporter) · Allure Report 3: https://allurereport.org

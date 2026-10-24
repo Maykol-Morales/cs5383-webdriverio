@@ -1,13 +1,15 @@
 // Guion de la demo en vivo (Windows, Linux y macOS). Uso: npm run demo
 // Cada paso espera Enter. Levanta Qolqe si no está corriendo y lo apaga al final.
+// Termina generando y abriendo el reporte Allure de las corridas de la demo.
 import { spawn, spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync, readdirSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { createInterface } from 'node:readline/promises'
 
 const URL = 'http://localhost:8000'
-const SPEC = 'test/specs/clasificar.e2e.js'
+const SPEC = 'features/clasificar.feature'
+const SPEC_IA = 'features/clasificar-ia.feature'
 const original = readFileSync(SPEC, 'utf8')
 const rl = createInterface({ input: process.stdin, output: process.stdout })
 
@@ -16,11 +18,13 @@ const paso = (titulo) => rl.question(`\n\x1b[1;31m▸ ${titulo}\x1b[0m\n  [Enter
 // Un solo string con shell: npx es npx.cmd en Windows.
 const wdio = (spec, env = {}) => spawnSync(`npx wdio run wdio.conf.js --spec ${spec}`,
     { stdio: 'inherit', shell: true, env: { ...process.env, ...env } })
+const npx = (comando) => spawnSync(`npx ${comando}`, { stdio: 'inherit', shell: true })
+const abrir = { win32: 'start ""', darwin: 'open' }[process.platform] ?? 'xdg-open'
 const qolqeVivo = () => fetch(`${URL}/api/salud`).then((r) => r.ok, () => false)
 
 let qolqe
 function terminar() {
-    writeFileSync(SPEC, original) // deja la spec como estaba, aun con Ctrl+C
+    writeFileSync(SPEC, original) // deja el escenario como estaba, aun con Ctrl+C
     qolqe?.kill()
     rl.close()
 }
@@ -36,26 +40,39 @@ if (!await qolqeVivo()) {
     if (!await qolqeVivo()) { console.error('Qolqe no arrancó. ¿Instalaste requirements.txt?'); terminar(); process.exit(1) }
 }
 console.log('Qolqe OK en', URL)
+rmSync('reportes/allure-results', { recursive: true, force: true }) // el reporte muestra solo esta demo
+rmSync('evidencia', { recursive: true, force: true })
 
 await paso('IA: browser.act() escribe los pasos en lenguaje natural')
-console.log(readFileSync('test/specs/clasificar-ia.e2e.js', 'utf8').split('\n').slice(14, 30).join('\n'))
+console.log(readFileSync(SPEC_IA, 'utf8').split('\n').slice(8).join('\n'))
+console.log(readFileSync('steps/ia.steps.js', 'utf8').split('\n').slice(13, 19).join('\n'))
 if (process.env.ANTHROPIC_API_KEY) {
-    await paso('IA en vivo: el modelo maneja Chrome y graba los pasos en __act__/')
-    wdio('test/specs/clasificar-ia.e2e.js', { HEADED: '1' })
+    await paso('IA en vivo: el modelo maneja Chrome y graba los pasos en features/__act__/')
+    wdio(SPEC_IA, { HEADED: '1' })
 } else {
-    console.log('\n  Sin ANTHROPIC_API_KEY: la spec de IA se marca como skipped.')
+    console.log('\n  Sin ANTHROPIC_API_KEY: el escenario @ia se marca como skipped.')
     console.log('  Con la clave: la 1ª corrida graba los pasos con el modelo y las siguientes')
-    console.log('  los repiten desde test/specs/__act__/ sin modelo y sin tokens.')
+    console.log('  los repiten desde features/__act__/ sin modelo y sin tokens.')
+    wdio(SPEC_IA) // queda como "skipped" en el reporte
 }
 
-await paso('Demo del flujo: Page Object + Fixture, con ventana')
+await paso('BDD: el escenario en Gherkin es la especificación')
+console.log(readFileSync(SPEC, 'utf8'))
+
+await paso('Demo del flujo: escenario → pasos → Page Objects → Chrome')
 wdio(SPEC, { HEADED: '1' })
 
-await paso("¿Detecta fallos? Cambiamos el oráculo a '2 movimientos'")
-writeFileSync(SPEC, original.replace('1 movimientos', '2 movimientos'))
+await paso("¿Detecta fallos? Cambiamos el escenario a 'cuenta 2 movimientos'")
+writeFileSync(SPEC, original.replace('cuenta 1 movimientos', 'cuenta 2 movimientos'))
 wdio(SPEC)
-
-await paso('Evidencia de la falla')
+writeFileSync(SPEC, original)
 console.log(existsSync('evidencia') ? readdirSync('evidencia').map((f) => `  evidencia/${f}`).join('\n') : '  (sin capturas)')
+
+await paso('Reporte Allure: escenarios, pasos, historias y la captura de la falla')
+npx('allure generate --clean reportes/allure-results')
+const reporte = join(process.cwd(), 'reportes', 'allure', 'index.html')
+if (!process.env.CI) spawnSync(`${abrir} "${reporte}"`, { shell: true })
+console.log(`  ${reporte}`)
+
 terminar()
-console.log('Spec restaurada. Fin de la demo.')
+console.log('Escenario restaurado. Fin de la demo.')
