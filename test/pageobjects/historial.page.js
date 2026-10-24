@@ -1,7 +1,6 @@
 // Pantalla /historial (G3): movimientos, detalle, clasificación y categorías.
 class HistorialPage {
     get filas() { return $$('[data-testid=fila-movimiento]') }
-    get mensajeClasificar() { return $('[data-testid=clasificar-mensaje]') }
     get categorias() { return $$('[data-testid=categoria]') }
 
     fila(codigo) { return $(`[data-testid=fila-movimiento][data-codigo="${codigo}"]`) }
@@ -17,6 +16,8 @@ class HistorialPage {
         await $('aria/Nombre').setValue(nombre)
         await $(`aria/${color}`).parentElement().click()
         await $('aria/Crear categoría').click()
+        // Qolqe muestra el aviso antes de recargar los selects; la lista se pinta al final.
+        await expect($('[data-testid=lista-categorias]')).toHaveText(expect.stringContaining(nombre))
     }
 
     // Abre el movimiento más reciente y devuelve su código de operación.

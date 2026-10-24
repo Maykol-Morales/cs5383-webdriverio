@@ -22,8 +22,8 @@ describe('G3 · Historial y categorías (IA)', () => {
         const codigo = await HistorialPage.filas[0].getAttribute('data-codigo')
         await browser.act('Abre el movimiento más reciente y clasifícalo en "Viajes" con la nota "Pasaje a Cusco"')
 
-        await expect(HistorialPage.mensajeClasificar).toHaveText('Clasificación guardada')
         await expect(HistorialPage.fila(codigo)).toHaveText(expect.stringContaining('Viajes'))
+        await expect(HistorialPage.fila(codigo)).toHaveText(expect.stringContaining('Pasaje a Cusco'))
         await expect(await HistorialPage.categoria('Viajes')).toHaveText(expect.stringContaining('1 movimientos'))
     })
 })

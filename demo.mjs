@@ -12,7 +12,8 @@ const original = readFileSync(SPEC, 'utf8')
 const rl = createInterface({ input: process.stdin, output: process.stdout })
 
 const paso = async (titulo) => rl.question(`\n\x1b[1;31m▸ ${titulo}\x1b[0m\n  [Enter] `)
-const wdio = (spec, env = {}) => spawnSync('npx', ['wdio', 'run', 'wdio.conf.js', '--spec', spec],
+// Un solo string con shell: npx es npx.cmd en Windows.
+const wdio = (spec, env = {}) => spawnSync(`npx wdio run wdio.conf.js --spec ${spec}`,
     { stdio: 'inherit', shell: true, env: { ...process.env, ...env } })
 const qolqeVivo = () => fetch(`${URL}/api/salud`).then((r) => r.ok, () => false)
 
