@@ -22,9 +22,11 @@ class HistorialPage {
         await browser.waitUntil(async () => await error.isDisplayed() || (await aviso.isDisplayed() && (await aviso.getText()).includes(nombre)),
             { timeoutMsg: `Qolqe no respondió al crear "${nombre}" (ni aviso ni error)` })
         if (await error.isDisplayed()) throw new Error(`Qolqe rechazó la categoría: ${await error.getText()}`)
-        // La lista se pinta después del aviso; también los selects que usa clasificar().
+        // En Windows, a veces Qolqe confirmaba la creación pero la lista (y los selects que usa
+        // clasificar) seguían viejos. Se recarga y se verifica el estado guardado.
+        await browser.refresh()
         await expect($('[data-testid=lista-categorias]')).toHaveText(expect.stringContaining(nombre),
-            { message: `Qolqe confirmó "${nombre}" pero la lista no se actualizó` })
+            { message: `Qolqe confirmó "${nombre}" pero no quedó guardada` })
     }
 
     // Abre el movimiento más reciente y devuelve su código de operación.

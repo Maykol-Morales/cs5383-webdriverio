@@ -25,15 +25,14 @@ When('clasifico mi movimiento más reciente en {string} con la nota {string}', a
     await HistorialPage.clasificar(categoria, nota)
 })
 
-// "Clasificación guardada" se oculta al repintar el detalle: se verifica el estado que queda.
+// "Clasificación guardada" se oculta al repintar el detalle: se verifica el estado guardado.
 Then('la fila del movimiento muestra la categoría {string} y la nota {string}', async function (categoria, nota) {
+    await browser.refresh()
     await expect(HistorialPage.fila(this.codigo)).toHaveText(expect.stringContaining(categoria))
     await expect(HistorialPage.fila(this.codigo)).toHaveText(expect.stringContaining(nota))
 })
 
-// Tras recargar: lo que importa es que quedó guardado (en la CI de Windows con ventana,
-// el contador en pantalla a veces no se repintaba).
+// Tras recargar, como el paso anterior: en la CI de Windows la UI a veces no repintaba.
 Then('la categoría {string} cuenta {int} movimientos', async (nombre, cantidad) => {
-    await browser.refresh()
     await expect(HistorialPage.categoria(nombre)).toHaveText(expect.stringContaining(`${cantidad} movimientos`))
 })
