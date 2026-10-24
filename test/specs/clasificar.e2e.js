@@ -16,6 +16,6 @@ describe('G3 · Historial y categorías', () => {
         // "Clasificación guardada" se oculta al repintar el detalle: se verifica el estado que queda.
         await expect(HistorialPage.fila(codigo)).toHaveText(expect.stringContaining('Viajes'))
         await expect(HistorialPage.fila(codigo)).toHaveText(expect.stringContaining('Pasaje a Cusco'))
-        await expect(await HistorialPage.categoria('Viajes')).toHaveText(expect.stringContaining('1 movimientos'))
+        await expect(HistorialPage.categoria('Viajes')).toHaveText(expect.stringContaining('1 movimientos'))
     })
 })

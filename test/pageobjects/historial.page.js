@@ -1,10 +1,10 @@
 // Pantalla /historial (G3): movimientos, detalle, clasificación y categorías.
 class HistorialPage {
     get filas() { return $$('[data-testid=fila-movimiento]') }
-    get categorias() { return $$('[data-testid=categoria]') }
 
     fila(codigo) { return $(`[data-testid=fila-movimiento][data-codigo="${codigo}"]`) }
-    categoria(nombre) { return this.categorias.find(async (c) => (await c.getText()).includes(nombre)) }
+    // Selector, no elemento: expect lo vuelve a buscar en cada reintento aunque Qolqe repinte la lista.
+    categoria(nombre) { return $(`//li[@data-testid="categoria"][contains(., "${nombre}")]`) }
 
     async abrir() {
         await $('aria/Movimientos').click()

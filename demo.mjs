@@ -11,7 +11,8 @@ const SPEC = 'test/specs/clasificar.e2e.js'
 const original = readFileSync(SPEC, 'utf8')
 const rl = createInterface({ input: process.stdin, output: process.stdout })
 
-const paso = async (titulo) => rl.question(`\n\x1b[1;31m▸ ${titulo}\x1b[0m\n  [Enter] `)
+// Si la entrada se cierra (stdin redirigido o CI), la demo sigue sin esperar.
+const paso = (titulo) => rl.question(`\n\x1b[1;31m▸ ${titulo}\x1b[0m\n  [Enter] `).catch(() => {})
 // Un solo string con shell: npx es npx.cmd en Windows.
 const wdio = (spec, env = {}) => spawnSync(`npx wdio run wdio.conf.js --spec ${spec}`,
     { stdio: 'inherit', shell: true, env: { ...process.env, ...env } })
