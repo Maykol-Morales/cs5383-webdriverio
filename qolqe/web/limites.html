@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Límites y alertas · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="limites">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Límites y alertas</h1>
+    <section class="tarjeta">
+      <div class="rejilla">
+        <div><span class="texto-suave">Límite por operación</span><div class="saldo" style="font-size:1.4rem" data-testid="limite-operacion"></div></div>
+        <div><span class="texto-suave">Límite diario vigente</span><div class="saldo" style="font-size:1.4rem" data-testid="limite-diario"></div></div>
+      </div>
+      <p style="margin-top:1rem">Usado hoy: <strong data-testid="limite-usado"></strong> · Disponible: <strong data-testid="limite-disponible"></strong></p>
+      <div class="barra" data-testid="barra-uso" role="presentation"><div style="width:0"></div></div>
+      <div class="alerta info" data-testid="limite-pendiente" hidden style="margin-top:1rem"></div>
+    </section>
+    <section class="tarjeta">
+      <h2>Cambiar límite diario</h2>
+      <p class="texto-suave">Entre S/ 100 y S/ 2,000, en múltiplos de S/ 50. Las reducciones son inmediatas; los aumentos se aplican 24 horas después.</p>
+      <div id="limites-mensaje" role="alert" hidden data-testid="limites-mensaje"></div>
+      <form id="form-limite" novalidate>
+        <div class="campo"><label for="nuevo-limite">Nuevo límite diario (S/)</label><input id="nuevo-limite" type="number" step="50" data-testid="input-nuevo-limite"></div>
+        <button id="boton-guardar-limite" type="submit" data-testid="boton-guardar-limite">Guardar</button>
+      </form>
+    </section>
+    <section class="tarjeta">
+      <h2>Alertas de consumo <small class="texto-suave" data-testid="contador-alertas"></small></h2>
+      <p class="texto-suave">Te enviamos un SMS cuando tu gasto del día alcanza el umbral (como máximo una vez al día por alerta).</p>
+      <div id="alerta-error" role="alert" hidden data-testid="alerta-error"></div>
+      <form id="form-alerta" novalidate>
+        <div class="rejilla">
+          <div class="campo">
+            <label for="alerta-tipo">Tipo de gasto</label>
+            <select id="alerta-tipo" data-testid="select-alerta-tipo">
+              <option value="TRANSFERENCIAS">Transferencias</option>
+              <option value="RECARGAS">Recargas</option>
+              <option value="PAGOS">Pagos de servicios</option>
+              <option value="TODAS">Todos mis gastos</option>
+            </select>
+          </div>
+          <div class="campo"><label for="alerta-umbral">Umbral (S/)</label><input id="alerta-umbral" type="number" step="10" data-testid="input-alerta-umbral"><span class="ayuda">Entre S/ 10 y S/ 2,000, en múltiplos de S/ 10</span></div>
+        </div>
+        <button id="boton-crear-alerta" type="submit" data-testid="boton-crear-alerta">Crear alerta</button>
+      </form>
+      <ul class="lista" data-testid="lista-alertas" style="margin-top:1rem"></ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pagar servicios · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="servicios">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Pagar servicios</h1>
+    <section class="tarjeta">
+      <form id="form-consulta" novalidate>
+        <div class="rejilla">
+          <div class="campo">
+            <label for="empresa">Empresa</label>
+            <select id="empresa" data-testid="select-empresa"></select>
+          </div>
+          <div class="campo">
+            <label for="suministro">Código de suministro</label>
+            <input id="suministro" inputmode="numeric" data-testid="input-suministro">
+            <span class="ayuda">Entre 8 y 12 dígitos</span>
+          </div>
+        </div>
+        <button id="boton-consultar" type="submit" data-testid="boton-consultar">Consultar deuda</button>
+      </form>
+    </section>
+    <div id="servicios-error" role="alert" hidden data-testid="servicios-error"></div>
+    <section class="tarjeta">
+      <h2>Deudas pendientes</h2>
+      <ul class="lista" data-testid="lista-deudas"></ul>
+    </section>
+    <section id="comprobante" class="tarjeta comprobante" hidden data-testid="comprobante">
+      <h2>Pago realizado</h2>
+      <dl>
+        <dt>Operación</dt><dd data-testid="comprobante-codigo"></dd>
+        <dt>Empresa</dt><dd data-testid="comprobante-empresa"></dd>
+        <dt>Suministro</dt><dd data-testid="comprobante-suministro"></dd>
+        <dt>Periodo</dt><dd data-testid="comprobante-periodo"></dd>
+        <dt>Monto</dt><dd data-testid="comprobante-monto"></dd>
+        <dt>Mora</dt><dd data-testid="comprobante-mora"></dd>
+        <dt>Total pagado</dt><dd data-testid="comprobante-total"></dd>
+        <dt>Saldo</dt><dd data-testid="comprobante-saldo"></dd>
+      </dl>
+    </section>
+    <section class="tarjeta">
+      <h2>Mis servicios afiliados <small class="texto-suave" data-testid="contador-afiliaciones"></small></h2>
+      <div id="afiliacion-error" role="alert" hidden data-testid="afiliacion-error"></div>
+      <form id="form-afiliacion" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="afi-empresa">Empresa</label><select id="afi-empresa" data-testid="select-afiliacion-empresa"></select></div>
+          <div class="campo"><label for="afi-suministro">Suministro</label><input id="afi-suministro" inputmode="numeric" data-testid="input-afiliacion-suministro"></div>
+          <div class="campo"><label for="afi-alias">Alias</label><input id="afi-alias" data-testid="input-afiliacion-alias"><span class="ayuda">Entre 3 y 20 caracteres</span></div>
+        </div>
+        <button id="boton-afiliar" type="submit" data-testid="boton-afiliar">Afiliar servicio</button>
+      </form>
+      <ul class="lista" data-testid="lista-afiliaciones" style="margin-top:1rem"></ul>
+    </section>
+    <section class="tarjeta">
+      <h2>Mis pagos</h2>
+      <div class="campo" style="max-width:320px">
+        <label for="filtro-pagos">Filtrar por servicio afiliado</label>
+        <select id="filtro-pagos" data-testid="select-filtro-pagos"><option value="">Todos mis pagos</option></select>
+      </div>
+      <ul class="lista" data-testid="lista-pagos"></ul>
+    </section>
+    <dialog id="dialogo-pago" data-testid="dialogo-pago" aria-labelledby="titulo-pago">
+      <h2 id="titulo-pago">Confirma el pago</h2>
+      <p data-testid="pago-detalle"></p>
+      <p>Total a pagar: <strong data-testid="pago-total"></strong></p>
+      <div class="acciones">
+        <button id="boton-confirmar-pago" type="button" data-testid="boton-confirmar-pago">Pagar</button>
+        <button id="boton-cancelar-pago" type="button" class="secundario" data-testid="boton-cancelar-pago">Cancelar</button>
+      </div>
+    </dialog>
+  </main>
+</div>
+</body>
+</html>

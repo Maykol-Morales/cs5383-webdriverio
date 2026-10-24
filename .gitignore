@@ -1,0 +1,6 @@
+node_modules/
+evidencia/
+.wdio/
+.venv/
+datos/
+__pycache__/

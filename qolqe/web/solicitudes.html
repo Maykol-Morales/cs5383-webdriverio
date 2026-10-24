@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solicitudes de dinero · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="solicitudes">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Solicitudes de dinero</h1>
+    <section class="tarjeta">
+      <h2>Solicitar dinero a un contacto</h2>
+      <div id="solicitud-mensaje" role="alert" hidden data-testid="solicitud-mensaje"></div>
+      <form id="form-solicitud" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="sol-contacto">Contacto</label><select id="sol-contacto" data-testid="select-solicitud-contacto"><option value="">— Elige un contacto —</option></select></div>
+          <div class="campo"><label for="sol-monto">Monto (S/)</label><input id="sol-monto" inputmode="decimal" placeholder="0.00" data-testid="input-solicitud-monto"></div>
+          <div class="campo"><label for="sol-motivo">Motivo</label><input id="sol-motivo" data-testid="input-solicitud-motivo"><span class="ayuda">Entre 3 y 60 caracteres</span></div>
+        </div>
+        <button id="boton-solicitar" type="submit" data-testid="boton-solicitar">Enviar solicitud</button>
+      </form>
+    </section>
+    <section class="tarjeta">
+      <div class="pestanas" role="tablist">
+        <button type="button" role="tab" data-vista="recibidas" aria-selected="true" data-testid="pestana-recibidas">Recibidas <span data-testid="contador-recibidas"></span></button>
+        <button type="button" role="tab" data-vista="enviadas" aria-selected="false" data-testid="pestana-enviadas">Enviadas <span data-testid="contador-enviadas"></span></button>
+      </div>
+      <div class="campo" style="max-width:260px">
+        <label for="filtro-estado">Estado</label>
+        <select id="filtro-estado" data-testid="select-filtro-estado">
+          <option value="">Todos</option>
+          <option value="PENDIENTE">Pendientes</option>
+          <option value="ACEPTADA">Aceptadas</option>
+          <option value="RECHAZADA">Rechazadas</option>
+          <option value="CANCELADA">Canceladas</option>
+          <option value="VENCIDA">Vencidas</option>
+        </select>
+      </div>
+      <ul class="lista" data-testid="lista-solicitudes"></ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

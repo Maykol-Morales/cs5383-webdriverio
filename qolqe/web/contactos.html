@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contactos frecuentes · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="contactos">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Contactos frecuentes</h1>
+    <section class="tarjeta">
+      <h2>Agregar contacto</h2>
+      <div id="contactos-error" role="alert" hidden data-testid="contactos-error"></div>
+      <form id="form-contacto" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="celular">Celular</label><input id="celular" inputmode="numeric" maxlength="9" data-testid="input-celular"></div>
+          <div class="campo">
+            <label for="alias">Alias</label><input id="alias" data-testid="input-alias">
+            <span class="ayuda">Entre 3 y 20 caracteres</span>
+          </div>
+        </div>
+        <button id="boton-agregar" type="submit" data-testid="boton-agregar-contacto">Agregar</button>
+      </form>
+    </section>
+    <section class="tarjeta">
+      <h2>Mis contactos <small id="contador-contactos" class="texto-suave" data-testid="contador-contactos"></small></h2>
+      <div class="campo" style="max-width:320px">
+        <label for="buscar">Buscar por alias</label>
+        <input id="buscar" type="search" placeholder="Ej.: jose" data-testid="input-buscar-contacto">
+      </div>
+      <ul class="lista" data-testid="lista-contactos"></ul>
+      <div class="paginacion">
+        <button id="contactos-anterior" type="button" class="secundario" data-testid="boton-anterior">Anterior</button>
+        <span id="contactos-pagina" data-testid="indicador-pagina"></span>
+        <button id="contactos-siguiente" type="button" class="secundario" data-testid="boton-siguiente">Siguiente</button>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

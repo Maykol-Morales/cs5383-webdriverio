@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear cuenta · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="registro">
+<main class="publica">
+  <section class="tarjeta-acceso">
+    <div class="marca"><span class="logo">Q</span> Qolqe</div>
+    <h1>Crea tu cuenta</h1>
+    <div id="registro-error" role="alert" hidden data-testid="registro-error"></div>
+    <form id="form-registro" novalidate>
+      <div class="campo">
+        <label for="dni">DNI</label>
+        <input id="dni" name="dni" inputmode="numeric" maxlength="8" required data-testid="input-dni">
+      </div>
+      <div class="campo">
+        <label for="nombres">Nombres y apellidos</label>
+        <input id="nombres" name="nombres" autocomplete="name" required data-testid="input-nombres">
+      </div>
+      <div class="campo">
+        <label for="celular">Celular</label>
+        <input id="celular" name="celular" inputmode="numeric" maxlength="9" required data-testid="input-celular">
+        <span class="ayuda">9 dígitos, empieza con 9</span>
+      </div>
+      <div class="campo">
+        <label for="correo">Correo electrónico <span class="texto-suave">(opcional)</span></label>
+        <input id="correo" name="correo" type="email" autocomplete="email" data-testid="input-correo">
+      </div>
+      <div class="campo">
+        <label for="pin">PIN de 4 dígitos</label>
+        <input id="pin" name="pin" type="password" inputmode="numeric" maxlength="4" required data-testid="input-pin">
+        <span class="ayuda">No uses dígitos repetidos (1111) ni secuencias (1234)</span>
+      </div>
+      <div class="campo">
+        <label for="pin-confirmacion">Confirma tu PIN</label>
+        <input id="pin-confirmacion" name="pin-confirmacion" type="password" inputmode="numeric" maxlength="4" required data-testid="input-pin-confirmacion">
+      </div>
+      <button id="boton-registrar" class="bloque" type="submit" data-testid="boton-registrar">Crear cuenta</button>
+    </form>
+    <div class="enlaces-acceso"><a href="/login">Ya tengo cuenta</a></div>
+  </section>
+</main>
+</body>
+</html>

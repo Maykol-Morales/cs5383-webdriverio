@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seguridad · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="seguridad">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Seguridad</h1>
+    <section class="tarjeta">
+      <h2>Cambiar PIN</h2>
+      <p class="texto-suave">El nuevo PIN no puede ser igual a tus últimos 3 PIN ni a los últimos 4 dígitos de tu celular.</p>
+      <div id="pin-mensaje" role="alert" hidden data-testid="pin-mensaje"></div>
+      <form id="form-pin" novalidate>
+        <div class="campo"><label for="pin-actual">PIN actual</label><input id="pin-actual" type="password" inputmode="numeric" maxlength="4" data-testid="input-pin-actual"></div>
+        <div class="campo"><label for="pin-nuevo">Nuevo PIN</label><input id="pin-nuevo" type="password" inputmode="numeric" maxlength="4" data-testid="input-pin-nuevo"></div>
+        <div class="campo"><label for="pin-confirmacion">Confirma el nuevo PIN</label><input id="pin-confirmacion" type="password" inputmode="numeric" maxlength="4" data-testid="input-pin-confirmacion"></div>
+        <button id="boton-cambiar-pin" type="submit" data-testid="boton-cambiar-pin">Cambiar PIN</button>
+      </form>
+    </section>
+    <section class="tarjeta">
+      <h2>Dispositivos de confianza <small class="texto-suave" data-testid="contador-dispositivos"></small></h2>
+      <p class="texto-suave">Si alguien ingresa a tu cuenta desde un dispositivo que no está en esta lista, te avisamos por SMS. Máximo 3.</p>
+      <div id="dispositivo-error" role="alert" hidden data-testid="dispositivo-error"></div>
+      <form id="form-dispositivo" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="disp-nombre">Nombre</label><input id="disp-nombre" data-testid="input-dispositivo-nombre"><span class="ayuda">Entre 3 y 30 caracteres</span></div>
+          <div class="campo">
+            <label for="disp-tipo">Tipo</label>
+            <select id="disp-tipo" data-testid="select-dispositivo-tipo">
+              <option value="CELULAR">Celular</option>
+              <option value="TABLET">Tablet</option>
+              <option value="COMPUTADORA">Computadora</option>
+            </select>
+          </div>
+          <div class="campo"><label for="disp-pin">Confirma con tu PIN</label><input id="disp-pin" type="password" inputmode="numeric" maxlength="4" data-testid="input-dispositivo-pin"></div>
+        </div>
+        <label class="campo-check"><input id="disp-este" type="checkbox" checked data-testid="check-este-dispositivo"> Es el dispositivo que estoy usando ahora</label>
+        <button id="boton-registrar-dispositivo" type="submit" data-testid="boton-registrar-dispositivo">Registrar dispositivo</button>
+      </form>
+      <ul class="lista" data-testid="lista-dispositivos" style="margin-top:1rem"></ul>
+    </section>
+    <section class="tarjeta">
+      <h2>Sesiones activas</h2>
+      <ul class="lista" data-testid="lista-sesiones"></ul>
+      <div class="acciones">
+        <button id="boton-cerrar-otras" type="button" class="peligro" data-testid="boton-cerrar-otras-sesiones">Cerrar las demás sesiones</button>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

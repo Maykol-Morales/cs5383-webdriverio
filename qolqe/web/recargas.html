@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recargar celular · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="recargas">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Recargar celular</h1>
+    <section class="tarjeta">
+      <div id="recarga-error" role="alert" hidden data-testid="recarga-error"></div>
+      <form id="form-recarga" novalidate>
+        <div class="campo">
+          <label for="celular">Celular a recargar</label>
+          <input id="celular" inputmode="numeric" maxlength="9" data-testid="input-celular">
+        </div>
+        <fieldset class="campo" style="border:0;padding:0">
+          <legend><strong>Monto</strong></legend>
+          <div class="chips" data-testid="montos-recarga"></div>
+          <span id="info-bono" class="ayuda"></span>
+          <span class="ayuda" data-testid="bono-estimado"></span>
+        </fieldset>
+        <button id="boton-recargar" type="submit" data-testid="boton-recargar">Recargar</button>
+      </form>
+    </section>
+    <section id="comprobante" class="tarjeta comprobante" hidden data-testid="comprobante">
+      <h2>Recarga exitosa</h2>
+      <dl>
+        <dt>Operación</dt><dd data-testid="comprobante-codigo"></dd>
+        <dt>Celular</dt><dd data-testid="comprobante-celular"></dd>
+        <dt>Monto</dt><dd data-testid="comprobante-monto"></dd>
+        <dt>Bono</dt><dd data-testid="comprobante-bono"></dd>
+        <dt>Fecha</dt><dd data-testid="comprobante-fecha"></dd>
+        <dt>Saldo</dt><dd data-testid="comprobante-saldo"></dd>
+      </dl>
+    </section>
+    <section class="tarjeta">
+      <h2>Últimas recargas</h2>
+      <ul class="lista" data-testid="lista-recargas"></ul>
+    </section>
+    <section class="tarjeta">
+      <h2>Recargas programadas <small class="texto-suave" data-testid="contador-programadas"></small></h2>
+      <p class="texto-suave">Se ejecutan una vez al mes el día que elijas (1 a 28). Máximo 3 activas.</p>
+      <div id="programada-error" role="alert" hidden data-testid="programada-error"></div>
+      <form id="form-programada" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="prog-celular">Celular</label><input id="prog-celular" inputmode="numeric" maxlength="9" data-testid="input-programada-celular"></div>
+          <div class="campo"><label for="prog-monto">Monto</label><select id="prog-monto" data-testid="select-programada-monto"></select></div>
+          <div class="campo"><label for="prog-dia">Día del mes</label><input id="prog-dia" type="number" min="1" max="28" data-testid="input-programada-dia"></div>
+          <div class="campo"><label for="prog-alias">Alias <span class="texto-suave">(opcional)</span></label><input id="prog-alias" data-testid="input-programada-alias"><span class="ayuda">Hasta 20 caracteres</span></div>
+        </div>
+        <button id="boton-programar" type="submit" data-testid="boton-programar">Programar recarga</button>
+      </form>
+      <ul class="lista" data-testid="lista-programadas" style="margin-top:1rem"></ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingresar · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="login">
+<main class="publica">
+  <section class="tarjeta-acceso">
+    <div class="marca"><span class="logo">Q</span> Qolqe</div>
+    <h1>Ingresa a tu billetera</h1>
+    <div id="login-aviso" hidden data-testid="login-aviso"></div>
+    <div id="login-error" role="alert" hidden data-testid="login-error"></div>
+    <form id="form-login" novalidate>
+      <div class="campo">
+        <label for="celular">Celular</label>
+        <input id="celular" name="celular" inputmode="numeric" autocomplete="username" maxlength="9" required data-testid="input-celular">
+      </div>
+      <div class="campo">
+        <label for="pin">PIN</label>
+        <input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4" required data-testid="input-pin">
+      </div>
+      <p class="ayuda" data-testid="login-dispositivo" hidden></p>
+      <button id="boton-ingresar" class="bloque" type="submit" data-testid="boton-ingresar">Ingresar</button>
+    </form>
+    <div class="enlaces-acceso">
+      <a href="/registro" data-testid="enlace-registro">Crear cuenta</a>
+      <a href="/desbloqueo" data-testid="enlace-desbloqueo">¿Cuenta bloqueada?</a>
+    </div>
+  </section>
+</main>
+</body>
+</html>

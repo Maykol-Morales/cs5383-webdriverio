@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="inicio">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Inicio</h1>
+    <p id="saludo" class="texto-suave" data-testid="saludo"></p>
+    <section class="tarjeta saldo-tarjeta" aria-labelledby="titulo-saldo">
+      <h2 id="titulo-saldo">Saldo disponible</h2>
+      <div class="saldo" data-testid="saldo-valor"><span class="esqueleto"></span></div>
+      <small id="saldo-actualizado"></small>
+      <div class="acciones">
+        <button type="button" class="secundario" data-testid="boton-ocultar-saldo" aria-pressed="false">Ocultar saldo</button>
+      </div>
+    </section>
+    <section class="rejilla" aria-label="Accesos rápidos">
+      <a class="boton" href="/transferir" data-testid="acceso-transferir">Transferir</a>
+      <a class="boton" href="/recargas" data-testid="acceso-recargas">Recargar celular</a>
+      <a class="boton" href="/servicios" data-testid="acceso-servicios">Pagar servicios</a>
+      <a class="boton" href="/solicitudes" data-testid="acceso-solicitudes">Solicitudes <span class="insignia" data-testid="solicitudes-pendientes" hidden></span></a>
+    </section>
+    <section class="tarjeta" style="margin-top:1.25rem" aria-labelledby="titulo-recientes">
+      <h2 id="titulo-recientes">Últimos movimientos</h2>
+      <ul class="lista" data-testid="lista-recientes"><li><span class="esqueleto"></span></li></ul>
+      <a href="/historial" data-testid="enlace-ver-todos">Ver todos los movimientos</a>
+    </section>
+  </main>
+</div>
+</body>
+</html>

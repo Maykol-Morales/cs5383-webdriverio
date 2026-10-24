@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi perfil · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="perfil">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Mi perfil</h1>
+    <section class="tarjeta">
+      <h2>Mis datos</h2>
+      <dl class="datos">
+        <dt>Nombres</dt><dd data-testid="perfil-nombres"></dd>
+        <dt>Celular</dt><dd data-testid="perfil-celular"></dd>
+        <dt>DNI</dt><dd data-testid="perfil-dni"></dd>
+        <dt>Correo</dt><dd data-testid="perfil-correo"></dd>
+        <dt>Cliente desde</dt><dd data-testid="perfil-creado"></dd>
+      </dl>
+    </section>
+    <section class="tarjeta">
+      <h2>Editar mis datos</h2>
+      <p class="texto-suave">El DNI y el celular no se pueden modificar.</p>
+      <div id="perfil-mensaje" role="alert" hidden data-testid="perfil-mensaje"></div>
+      <form id="form-perfil" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="nombres">Nombres</label><input id="nombres" maxlength="100" data-testid="input-nombres"></div>
+          <div class="campo"><label for="correo">Correo electrónico</label><input id="correo" type="email" data-testid="input-correo"><span class="ayuda">Déjalo vacío para quitarlo</span></div>
+        </div>
+        <button id="boton-guardar-perfil" type="submit" data-testid="boton-guardar-perfil">Guardar cambios</button>
+      </form>
+    </section>
+    <section class="tarjeta zona-peligro">
+      <h2>Cerrar mi cuenta</h2>
+      <p class="texto-suave">Para cerrar tu cuenta tu saldo debe ser S/ 0.00 y no debes tener solicitudes de dinero pendientes. Esta acción no se puede deshacer.</p>
+      <div id="cierre-mensaje" role="alert" hidden data-testid="cierre-mensaje"></div>
+      <button id="boton-cerrar-cuenta" type="button" class="peligro" data-testid="boton-cerrar-cuenta">Cerrar mi cuenta</button>
+    </section>
+  </main>
+</div>
+</body>
+</html>

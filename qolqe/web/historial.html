@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movimientos · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="historial">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Movimientos</h1>
+    <section class="tarjeta">
+      <form id="form-filtros" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="desde">Desde</label><input id="desde" type="date" data-testid="input-desde"></div>
+          <div class="campo"><label for="hasta">Hasta</label><input id="hasta" type="date" data-testid="input-hasta"></div>
+          <div class="campo">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" data-testid="select-tipo">
+              <option value="">Todos</option>
+              <option value="TRANSFERENCIA_ENVIADA">Transferencias enviadas</option>
+              <option value="TRANSFERENCIA_RECIBIDA">Transferencias recibidas</option>
+              <option value="RECARGA">Recargas</option>
+              <option value="PAGO_SERVICIO">Pagos de servicios</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="filtro-categoria">Categoría</label>
+            <select id="filtro-categoria" data-testid="select-categoria"><option value="">Todas</option></select>
+          </div>
+        </div>
+        <div class="acciones">
+          <button type="submit" data-testid="boton-buscar">Buscar</button>
+          <button id="boton-exportar" type="button" class="secundario" data-testid="boton-exportar">Exportar CSV</button>
+        </div>
+      </form>
+    </section>
+    <div id="historial-error" role="alert" hidden data-testid="historial-error"></div>
+    <section class="tarjeta">
+      <table data-testid="tabla-movimientos">
+        <thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Categoría</th><th class="numero">Importe</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="paginacion">
+        <button id="boton-anterior" type="button" class="secundario" data-testid="boton-anterior">Anterior</button>
+        <span id="indicador-pagina" data-testid="indicador-pagina"></span>
+        <button id="boton-siguiente" type="button" class="secundario" data-testid="boton-siguiente">Siguiente</button>
+      </div>
+    </section>
+    <section id="detalle-movimiento" class="tarjeta comprobante" hidden data-testid="detalle-movimiento">
+      <h2>Detalle del movimiento</h2>
+      <dl>
+        <dt>Operación</dt><dd data-testid="detalle-codigo"></dd>
+        <dt>Fecha</dt><dd data-testid="detalle-fecha"></dd>
+        <dt>Tipo</dt><dd data-testid="detalle-tipo"></dd>
+        <dt>Descripción</dt><dd data-testid="detalle-descripcion"></dd>
+        <dt>Monto</dt><dd data-testid="detalle-monto"></dd>
+        <dt>Comisión</dt><dd data-testid="detalle-comision"></dd>
+        <dt>Importe</dt><dd data-testid="detalle-importe"></dd>
+        <dt>Contraparte</dt><dd data-testid="detalle-contraparte"></dd>
+      </dl>
+      <h3>Clasificar</h3>
+      <div id="clasificar-mensaje" role="alert" hidden data-testid="clasificar-mensaje"></div>
+      <form id="form-clasificar" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="clasificar-categoria">Categoría</label><select id="clasificar-categoria" data-testid="select-clasificar-categoria"><option value="">Sin categoría</option></select></div>
+          <div class="campo"><label for="clasificar-nota">Nota</label><input id="clasificar-nota" data-testid="input-nota"><span class="ayuda">Hasta 100 caracteres</span></div>
+        </div>
+        <button type="submit" data-testid="boton-clasificar">Guardar clasificación</button>
+      </form>
+    </section>
+    <section class="tarjeta">
+      <h2>Mis categorías <small class="texto-suave" data-testid="contador-categorias"></small></h2>
+      <div id="categoria-error" role="alert" hidden data-testid="categoria-error"></div>
+      <form id="form-categoria" novalidate>
+        <div class="rejilla">
+          <div class="campo"><label for="categoria-nombre">Nombre</label><input id="categoria-nombre" data-testid="input-categoria-nombre"><span class="ayuda">Entre 3 y 20 caracteres</span></div>
+          <div class="campo"><span class="etiqueta">Color</span><div class="paleta" data-testid="paleta-colores" role="radiogroup" aria-label="Color"></div></div>
+        </div>
+        <button id="boton-crear-categoria" type="submit" data-testid="boton-crear-categoria">Crear categoría</button>
+      </form>
+      <ul class="lista" data-testid="lista-categorias" style="margin-top:1rem"></ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Desbloquear cuenta · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="desbloqueo">
+<main class="publica">
+  <section class="tarjeta-acceso">
+    <div class="marca"><span class="logo">Q</span> Qolqe</div>
+    <h1>Desbloquea tu cuenta</h1>
+    <p class="texto-suave">Te enviaremos un código de 6 dígitos por SMS. Vence en 5 minutos.</p>
+    <div id="desbloqueo-mensaje" role="alert" hidden data-testid="desbloqueo-mensaje"></div>
+    <form id="form-solicitar" novalidate>
+      <div class="campo">
+        <label for="celular">Celular</label>
+        <input id="celular" name="celular" inputmode="numeric" maxlength="9" required data-testid="input-celular">
+      </div>
+      <button id="boton-solicitar" class="bloque secundario" type="submit" data-testid="boton-solicitar-codigo">Enviar código</button>
+    </form>
+    <div id="paso-codigo" hidden>
+      <form id="form-confirmar" novalidate>
+        <div class="campo">
+          <label for="codigo">Código de desbloqueo</label>
+          <input id="codigo" name="codigo" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required data-testid="input-codigo">
+        </div>
+        <button id="boton-confirmar" class="bloque" type="submit" data-testid="boton-desbloquear">Desbloquear</button>
+      </form>
+    </div>
+    <div class="enlaces-acceso"><a href="/login">Volver a ingresar</a></div>
+  </section>
+</main>
+</body>
+</html>

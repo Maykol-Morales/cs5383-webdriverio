@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transferir · Qolqe</title>
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body data-pagina="transferir">
+<div class="app">
+  <nav id="menu" class="menu" aria-label="Menú principal"></nav>
+  <main class="contenido">
+    <h1>Transferir</h1>
+    <section class="tarjeta">
+      <div class="pestanas" role="tablist">
+        <button type="button" role="tab" data-tipo="QOLQE" aria-selected="true" data-testid="pestana-qolqe">A un usuario Qolqe</button>
+        <button type="button" role="tab" data-tipo="INTERBANCARIA" aria-selected="false" data-testid="pestana-interbancaria">A otro banco</button>
+      </div>
+      <div id="transferencia-error" role="alert" hidden data-testid="transferencia-error"></div>
+      <form id="form-transferencia" novalidate>
+        <div id="grupo-qolqe">
+          <div class="campo">
+            <label for="contacto">Contacto frecuente</label>
+            <select id="contacto" data-testid="select-contacto"><option value="">— Escribir un celular —</option></select>
+          </div>
+          <div class="campo">
+            <label for="celular-destino">Celular de destino</label>
+            <input id="celular-destino" inputmode="numeric" maxlength="9" data-testid="input-celular-destino">
+          </div>
+        </div>
+        <div id="grupo-interbancaria" hidden>
+          <div class="campo">
+            <label for="cci">CCI de destino</label>
+            <input id="cci" inputmode="numeric" maxlength="20" data-testid="input-cci">
+            <span class="ayuda">20 dígitos. Comisión de 1.5 % (mínimo S/ 1.00, máximo S/ 5.00)</span>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="monto">Monto (S/)</label>
+          <input id="monto" inputmode="decimal" placeholder="0.00" data-testid="input-monto">
+          <span class="ayuda">Máximo S/ 500.00 por operación</span>
+        </div>
+        <div class="campo">
+          <label for="descripcion">Descripción (opcional)</label>
+          <input id="descripcion" maxlength="60" data-testid="input-descripcion">
+        </div>
+        <button id="boton-continuar" type="submit" data-testid="boton-continuar">Continuar</button>
+      </form>
+    </section>
+    <section id="comprobante" class="tarjeta comprobante" hidden data-testid="comprobante">
+      <h2>¡Transferencia exitosa!</h2>
+      <dl>
+        <dt>Operación</dt><dd data-testid="comprobante-codigo"></dd>
+        <dt>Destino</dt><dd data-testid="comprobante-destino"></dd>
+        <dt>Monto</dt><dd data-testid="comprobante-monto"></dd>
+        <dt>Comisión</dt><dd data-testid="comprobante-comision"></dd>
+        <dt>Total</dt><dd data-testid="comprobante-total"></dd>
+        <dt>Saldo</dt><dd data-testid="comprobante-saldo"></dd>
+        <dt>Fecha</dt><dd data-testid="comprobante-fecha"></dd>
+      </dl>
+      <div class="acciones"><button id="boton-nueva" type="button" class="secundario" data-testid="boton-nueva-transferencia">Nueva transferencia</button></div>
+    </section>
+    <dialog id="dialogo-confirmacion" data-testid="dialogo-confirmacion" aria-labelledby="titulo-confirmacion">
+      <h2 id="titulo-confirmacion">Confirma tu transferencia</h2>
+      <div class="comprobante">
+        <dl>
+          <dt>Destino</dt><dd data-testid="confirmar-destino"></dd>
+          <dt>Monto</dt><dd data-testid="confirmar-monto"></dd>
+          <dt>Comisión</dt><dd data-testid="confirmar-comision"></dd>
+          <dt>Total</dt><dd data-testid="confirmar-total"></dd>
+        </dl>
+      </div>
+      <div class="acciones">
+        <button id="boton-confirmar" type="button" data-testid="boton-confirmar">Confirmar</button>
+        <button id="boton-cancelar" type="button" class="secundario" data-testid="boton-cancelar">Cancelar</button>
+      </div>
+    </dialog>
+  </main>
+</div>
+</body>
+</html>
