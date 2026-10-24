@@ -38,10 +38,16 @@ class HistorialPage {
         return codigo
     }
 
+    // Espera la respuesta del PUT (vía WebDriver BiDi): el aviso de Qolqe dura milisegundos.
     async clasificar(categoria, nota) {
+        const guardado = await browser.mock('**/api/movimientos/*/clasificacion', { method: 'put' })
         await $('[data-testid=select-clasificar-categoria]').selectByVisibleText(categoria)
         await $('[data-testid=input-nota]').setValue(nota)
         await $('aria/Guardar clasificación').click()
+        await browser.waitUntil(() => guardado.calls.length > 0, { timeoutMsg: 'Qolqe no respondió al guardar la clasificación' })
+        const status = guardado.calls[0].response.status
+        await guardado.restore()
+        if (status !== 200) throw new Error(`Qolqe rechazó la clasificación: HTTP ${status}`)
     }
 }
 
