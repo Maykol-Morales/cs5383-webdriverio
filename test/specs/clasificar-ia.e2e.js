@@ -24,6 +24,9 @@ describe('G3 · Historial y categorías (IA)', () => {
 
         await expect(HistorialPage.fila(codigo)).toHaveText(expect.stringContaining('Viajes'))
         await expect(HistorialPage.fila(codigo)).toHaveText(expect.stringContaining('Pasaje a Cusco'))
+        // El contador se verifica tras recargar: lo que importa es que quedó guardado
+        // (en la CI de Windows con ventana, el contador en pantalla a veces no se repintaba).
+        await browser.refresh()
         await expect(HistorialPage.categoria('Viajes')).toHaveText(expect.stringContaining('1 movimientos'))
     })
 })
