@@ -8,7 +8,7 @@ Laboratorio de automatización web de **CS5383 Pruebas y Verificación de Softwa
 Automatiza un *happy path* de Qolqe Wallet con **BDD (Cucumber + Gherkin)**, el patrón **Page Object + Fixture** y reportería con **Allure**:
 
 ```gherkin
-Scenario: Crear la categoría "Viajes" y clasificar el último movimiento
+Scenario: Clasificar el último movimiento en una categoría nueva
   Given que inicié sesión como Ana
   And estoy en la sección Movimientos
   When creo la categoría "Viajes" de color "#1E88E5"
@@ -101,7 +101,7 @@ Para ver el navegador, active `HEADED` antes de `npm test`:
 Resultado esperado:
 
 ```
-Crear la categoría "Viajes" y clasificar el último movimiento
+Clasificar el último movimiento en una categoría nueva
    ✓ Given que inicié sesión como Ana
    ✓ And estoy en la sección Movimientos
    ✓ When creo la categoría "Viajes" de color "#1E88E5"

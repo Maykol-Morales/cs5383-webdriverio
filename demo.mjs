@@ -2,7 +2,7 @@
 // Cada paso espera Enter. Levanta Qolqe si no está corriendo y lo apaga al final.
 // Termina generando y abriendo el reporte Allure de las corridas de la demo.
 import { spawn, spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, writeFileSync, readdirSync, rmSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync, readdirSync, rmSync, mkdirSync, openSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { createInterface } from 'node:readline/promises'
@@ -34,8 +34,10 @@ process.on('SIGINT', () => { terminar(); process.exit(130) })
 if (!await qolqeVivo()) {
     const python = ['.venv/Scripts/python.exe', '.venv/bin/python'].find(existsSync) ?? 'python'
     console.log('Levantando Qolqe en :8000...')
+    mkdirSync('reportes', { recursive: true })
+    const log = openSync('reportes/qolqe.log', 'w') // peticiones al servidor, para diagnosticar fallas
     qolqe = spawn(python, ['-m', 'uvicorn', 'qolqe.main:app', '--port', '8000'],
-        { env: { ...process.env, QOLQE_BD: join(tmpdir(), 'qolqe-demo.db') }, stdio: 'ignore' })
+        { env: { ...process.env, QOLQE_BD: join(tmpdir(), 'qolqe-demo.db') }, stdio: ['ignore', log, log] })
     for (let i = 0; i < 60 && !await qolqeVivo(); i++) await new Promise((r) => setTimeout(r, 500))
     if (!await qolqeVivo()) { console.error('Qolqe no arrancó. ¿Instalaste requirements.txt?'); terminar(); process.exit(1) }
 }
@@ -60,7 +62,7 @@ await paso('BDD: el escenario en Gherkin es la especificación')
 console.log(readFileSync(SPEC, 'utf8'))
 
 await paso('Demo del flujo: escenario → pasos → Page Objects → Chrome')
-wdio(SPEC, { HEADED: '1' })
+const flujo = wdio(SPEC, { HEADED: '1' })
 
 await paso("¿Detecta fallos? Cambiamos el escenario a 'cuenta 2 movimientos'")
 writeFileSync(SPEC, original.replace('cuenta 1 movimientos', 'cuenta 2 movimientos'))
@@ -76,3 +78,4 @@ console.log(`  ${reporte}`)
 
 terminar()
 console.log('Escenario restaurado. Fin de la demo.')
+process.exitCode = flujo.status // la demo falla si el flujo (no la mutación) falló

@@ -60,4 +60,5 @@ jobs:
           name: demo-windows
           path: |
             evidencia/
+            reportes/qolqe.log
             reportes/allure/index.html
