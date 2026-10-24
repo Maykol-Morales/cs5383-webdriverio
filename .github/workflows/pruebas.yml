@@ -53,3 +53,11 @@ jobs:
           printf "\n%.0s" 1 2 3 4 5 | npm run demo
           git diff --exit-code features/
           ls evidencia/*.png reportes/allure/index.html
+
+      - uses: actions/upload-artifact@v4
+        if: always() && runner.os == 'Windows'
+        with:
+          name: demo-windows
+          path: |
+            evidencia/
+            reportes/allure/index.html

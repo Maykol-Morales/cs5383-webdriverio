@@ -17,7 +17,12 @@ class HistorialPage {
         await $(`aria/${color}`).parentElement().click()
         await $('aria/Crear categoría').click()
         // Qolqe muestra el aviso antes de recargar los selects; la lista se pinta al final.
-        await expect($('[data-testid=lista-categorias]')).toHaveText(expect.stringContaining(nombre))
+        // Si Qolqe rechaza la categoría, el paso falla con su mensaje en vez de esperar en vano.
+        const error = $('[data-testid=categoria-error]')
+        await browser.waitUntil(async () =>
+            (await $('[data-testid=lista-categorias]').getText()).includes(nombre) || await error.isDisplayed(),
+        { timeoutMsg: `"${nombre}" no apareció en la lista de categorías` })
+        if (await error.isDisplayed()) throw new Error(`Qolqe rechazó la categoría: ${await error.getText()}`)
     }
 
     // Abre el movimiento más reciente y devuelve su código de operación.
