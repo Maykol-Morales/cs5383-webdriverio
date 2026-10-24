@@ -1,5 +1,7 @@
 # CS5383 · WebdriverIO en Qolqe
 
+[![Pruebas](https://github.com/Maykol-Morales/cs5383-webdriverio/actions/workflows/pruebas.yml/badge.svg)](https://github.com/Maykol-Morales/cs5383-webdriverio/actions/workflows/pruebas.yml)
+
 Laboratorio de automatización web de **CS5383 Pruebas y Verificación de Software** (UTEC, Clase 11).
 **Grupo 3 · Sebastian y Maykol** · Herramienta: **WebdriverIO 10** · Módulo: **G3 Historial y categorías**.
 
@@ -19,26 +21,53 @@ El repositorio es autocontenido: incluye una copia **sin modificar** del sistema
 | Node.js | **22.19 o superior** (lo exige WebdriverIO 10) |
 | Navegador | Chrome o Chromium. Si no se encuentra, WebdriverIO descarga *Chrome for Testing* la primera vez. |
 
+En Windows, instale Python marcando **"Add python.exe to PATH"**. Compruebe en una terminal nueva que `python --version` y `node --version` respondan.
+
 ## 1. Instalación
+
+Probado en **Windows** y Linux (ver la insignia de CI). Los comandos no necesitan activar la `.venv`, así se evita el bloqueo de scripts de PowerShell.
+
+**Windows (PowerShell o CMD)**
+
+```powershell
+git clone https://github.com/Maykol-Morales/cs5383-webdriverio.git
+cd cs5383-webdriverio
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+npm install
+```
+
+**Linux / macOS**
 
 ```bash
 git clone https://github.com/Maykol-Morales/cs5383-webdriverio.git
 cd cs5383-webdriverio
-
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
 npm install
 ```
 
-## 2. Ejecución
+## 2. Demo guiada (recomendado)
+
+```bash
+npm run demo
+```
+
+Funciona igual en Windows, Linux y macOS. Avanza con Enter:
+
+1. Levanta Qolqe en http://localhost:8000 si no está corriendo (con una base de datos temporal) y lo apaga al terminar.
+2. Muestra la spec de IA escrita en lenguaje natural.
+3. Corre el happy path con Chrome visible.
+4. Cambia el oráculo a "2 movimientos" para mostrar que la prueba falla y deja una captura en `evidencia/`.
+5. Restaura la spec, también si se interrumpe con Ctrl+C.
+
+## 3. Ejecución manual
 
 **Terminal 1: levantar Qolqe** (déjela abierta)
 
 ```bash
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-uvicorn qolqe.main:app --port 8000
+.venv\Scripts\python -m uvicorn qolqe.main:app --port 8000     # Windows
+.venv/bin/python -m uvicorn qolqe.main:app --port 8000          # Linux / macOS
 ```
 
 Qolqe queda en http://localhost:8000; la API está documentada en http://localhost:8000/docs.
@@ -46,9 +75,16 @@ Qolqe queda en http://localhost:8000; la API está documentada en http://localho
 **Terminal 2: correr la prueba**
 
 ```bash
-npm test                           # sin ventana (headless)
-HEADED=1 npm test                  # con ventana (Windows PowerShell: $env:HEADED=1; npm test)
+npm test
 ```
+
+Para ver el navegador, active `HEADED` antes de `npm test`:
+
+| Terminal | Comando |
+|---|---|
+| PowerShell | `$env:HEADED=1; npm test` |
+| CMD | `set HEADED=1 && npm test` |
+| Linux / macOS | `HEADED=1 npm test` |
 
 Resultado esperado:
 
@@ -64,15 +100,7 @@ Antes de cada prueba se reinician los datos de Qolqe (`POST /api/pruebas/reinici
 |---|---|
 | `HEADED` | Cualquier valor: ejecuta con ventana |
 | `QOLQE_URL` | URL de Qolqe (por defecto `http://localhost:8000`) |
-| `CHROME_BIN` | Ruta del navegador, si no es el Chrome por defecto (ej. `/usr/bin/chromium`) |
-
-## 3. Demo guiada (Linux / macOS)
-
-```bash
-./demo.sh
-```
-
-Avanza con Enter: levanta Qolqe si no está corriendo (con la base de datos en `/tmp`), muestra la spec de IA, corre el flujo con ventana y luego cambia el oráculo a "2 movimientos" para mostrar que la prueba falla y deja evidencia. Al terminar, o con Ctrl+C, restaura la spec.
+| `CHROME_BIN` | Ruta del navegador, si no es el Chrome por defecto |
 
 ## 4. Capacidad de IA: `browser.act()`
 
@@ -81,7 +109,7 @@ Avanza con Enter: levanta Qolqe si no está corriendo (con la base de datos en `
 Necesita una clave de API, que este repositorio **no incluye**. Sin clave ni caché, la spec se marca como *skipped*:
 
 ```bash
-export ANTHROPIC_API_KEY=...       # o WDIO_AI_MODEL=ollama:<modelo> para uno local
+export ANTHROPIC_API_KEY=...       # PowerShell: $env:ANTHROPIC_API_KEY="..."
 npm run test:ia                    # 1ª vez: graba · siguientes: repite desde la caché
 npm run test:ia:regrabar           # vuelve a grabar
 npm run eject                      # convierte los pasos grabados en código WebdriverIO normal
@@ -99,7 +127,7 @@ test/pageobjects/
 test/specs/
   clasificar.e2e.js           happy path con Page Objects
   clasificar-ia.e2e.js        mismo flujo con browser.act()
-demo.sh                       guion de la demo en vivo
+demo.mjs                      guion de la demo en vivo (npm run demo)
 ```
 
 ## Fuentes

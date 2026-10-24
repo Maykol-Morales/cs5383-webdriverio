@@ -5,7 +5,8 @@
     "test": "wdio run wdio.conf.js --spec test/specs/clasificar.e2e.js",
     "test:ia": "wdio run wdio.conf.js --spec test/specs/clasificar-ia.e2e.js",
     "test:ia:regrabar": "wdio run wdio.conf.js --spec test/specs/clasificar-ia.e2e.js -s",
-    "eject": "wdio-ai eject test/specs/clasificar-ia.e2e.js"
+    "eject": "wdio-ai eject test/specs/clasificar-ia.e2e.js",
+    "demo": "node demo.mjs"
   },
   "license": "ISC",
   "type": "module",

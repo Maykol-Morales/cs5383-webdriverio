@@ -1,0 +1,44 @@
+name: Pruebas
+
+on: [push, workflow_dispatch]
+
+jobs:
+  e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v5
+        with: { node-version: '22' }
+
+      # Los mismos comandos del README, sin activar la .venv.
+      - name: Instalar
+        run: |
+          python -m venv .venv
+          PY=.venv/bin/python; [ -f .venv/Scripts/python.exe ] && PY=.venv/Scripts/python.exe
+          $PY -m pip install -r requirements.txt
+          npm ci
+
+      - name: npm test contra Qolqe
+        run: |
+          PY=.venv/bin/python; [ -f .venv/Scripts/python.exe ] && PY=.venv/Scripts/python.exe
+          $PY -m uvicorn qolqe.main:app --port 8000 &
+          until curl -sf localhost:8000/api/salud; do sleep 1; done
+          npm test
+
+      # npm run demo: Qolqe propio, flujo con ventana y mutación que falla.
+      - name: npm run demo (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          taskkill //F //IM python.exe || true
+          yes "" | npm run demo
+          git diff --exit-code test/
+          ls evidencia/*.png

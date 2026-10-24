@@ -1,3 +1,5 @@
+import { mkdirSync } from 'node:fs'
+
 export const baseUrl = process.env.QOLQE_URL ?? 'http://localhost:8000'
 
 export const config = {
@@ -27,6 +29,8 @@ export const config = {
         if (!res.ok) throw new Error(`No se pudo reiniciar Qolqe: HTTP ${res.status}`)
     },
     afterTest: async (test, context, { passed }) => {
-        if (!passed) await browser.saveScreenshot(`./evidencia/${test.title.replace(/\W+/g, '_')}.png`)
+        if (passed) return
+        mkdirSync('evidencia', { recursive: true })
+        await browser.saveScreenshot(`./evidencia/${test.title.replace(/\W+/g, '_')}.png`)
     },
 }
