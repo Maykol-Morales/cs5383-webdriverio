@@ -1,7 +1,5 @@
 # CS5383 · WebdriverIO en Qolqe
 
-[![Pruebas](https://github.com/Maykol-Morales/cs5383-webdriverio/actions/workflows/pruebas.yml/badge.svg)](https://github.com/Maykol-Morales/cs5383-webdriverio/actions/workflows/pruebas.yml)
-
 Laboratorio de automatización web de **CS5383 Pruebas y Verificación de Software** (UTEC, Clase 11).
 **Grupo 3 · Sebastian y Maykol** · Herramienta: **WebdriverIO 10** · Módulo: **G3 Historial y categorías**.
 
@@ -35,7 +33,7 @@ En Windows, instale Python marcando **"Add python.exe to PATH"**. Compruebe en u
 
 ## 1. Instalación
 
-Probado en **Windows** y Linux (ver la insignia de CI). Los comandos no necesitan activar la `.venv`, así se evita el bloqueo de scripts de PowerShell.
+Probado en **Windows** y Linux. Los comandos no necesitan activar la `.venv`, así se evita el bloqueo de scripts de PowerShell.
 
 **Windows (PowerShell o CMD)**
 
@@ -126,7 +124,6 @@ Antes de cada escenario se reinician los datos de Qolqe (`POST /api/pruebas/rein
 | Consola (`spec`) | la terminal | cada paso Given/When/Then con ✓ o ✖ |
 | **Allure** | `npm run reporte` → `reportes/allure/index.html` (un solo archivo, se abre con doble clic) | escenarios agrupados por épica e historia (`@epic=`, `@story=`), severidad, pasos con su duración y la **captura adjunta** del paso que falló |
 | Evidencia | `evidencia/*.png` | captura del navegador cuando un paso falla |
-| CI | pestaña *Actions* de GitHub | corre en Windows y Linux y publica el reporte Allure como artefacto descargable |
 
 Las etiquetas del `.feature` alimentan el reporte: `@HU-G3-03` filtra en Cucumber y `@story=HU-G3-03` agrupa en Allure. El reporte acumula el historial de corridas en `reportes/allure-historial.jsonl`.
 
